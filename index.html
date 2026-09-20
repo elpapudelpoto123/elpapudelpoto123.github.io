@@ -1,208 +1,43 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delta Executor - iOS Portal</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+function procesarRegistro(event) {
+    event.preventDefault(); // Evita que la página se recargue
+    
+    const userIn = document.getElementById('usuario').value;
+    const passIn = document.getElementById('password').value;
+    
+    const btn = document.getElementById('submitBtn');
+    const status = document.getElementById('statusMessage');
+    
+    // Deshabilitar el botón y mostrar la animación de carga para dar realismo
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+    btn.innerText = "Procesando...";
+    status.style.display = "block";
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            
-            /* TU GIF DE FONDO CONFIGURADO CON FILTRO OSCURO PARA MEJORAR LA LECTURA */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)), url('https://giphy.com');
-            
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            color: #ffffff;
-            padding: 20px;
-        }
+    // CASO 1: Si el usuario introduce las credenciales específicas
+    if (userIn === "676767" && passIn === "tungtungtung") {
+        setTimeout(() => {
+            status.innerText = "Acceso de administrador detectado. Redirigiendo...";
+        }, 1500);
 
-        .card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 40px 30px;
-            border-radius: 24px;
-            text-align: center;
-            max-width: 420px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-        }
-
-        h1 {
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            letter-spacing: -0.5px;
-        }
-
-        .author {
-            font-size: 12px;
-            color: #38bdf8;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 24px;
-        }
-
-        p {
-            font-size: 14px;
-            color: #9ca3af;
-            line-height: 1.5;
-            margin-bottom: 24px;
-        }
-
-        /* DISEÑO DE LA INTERFAZ DE REGISTRO */
-        .form-group {
-            text-align: left;
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            color: #d1d5db;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            color: #ffffff;
-            font-size: 15px;
-            outline: none;
-            transition: border-color 0.2s, background-color 0.2s;
-        }
-
-        input:focus {
-            border-color: #0071e3;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .btn {
-            display: inline-block;
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #ffffff;
-            background: linear-gradient(135deg, #0071e3 0%, #005bb5 100%);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-top: 10px;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 6px 20px rgba(0, 113, 227, 0.3);
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 30%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            animation: destello 3s infinite linear;
-        }
-
-        @keyframes destello {
-            0% { left: -30%; }
-            30% { left: 130%; }
-            100% { left: 130%; }
-        }
-
-        .btn:hover {
-            transform: scale(1.01);
-            box-shadow: 0 10px 24px rgba(0, 113, 227, 0.45);
-        }
-
-        /* EFECTO DE CARGA DE BASE DE DATOS FALSOS */
-        .loading-text {
-            display: none;
-            font-size: 14px;
-            color: #38bdf8;
-            margin-top: 15px;
-            font-weight: 500;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="card">
-        <h1>Delta Executor iOS</h1>
-        <div class="author">Direct Install por Enchidna</div>
+        setTimeout(() => {
+            // REEMPLAZA ESTE ENLACE por la página web a la que quieres enviar al administrador
+            window.location.href = "https://tu-pagina-de-administrador.com"; 
+        }, 3000);
         
-        <p>Crea una cuenta gratuita en el servidor de Enchidna para registrar tu dispositivo y autorizar la instalación directa.</p>
-        
-        <!-- Formulario de Registro Simulando Base de Datos -->
-        <form id="registroForm" onsubmit="procesarRegistro(event)">
-            <div class="form-group">
-                <label for="usuario">Nombre de usuario</label>
-                <input type="text" id="usuario" placeholder="Ej: deltauser" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Contraseña del portal</label>
-                <input type="password" id="password" placeholder="••••••••" required>
-            </div>
-            
-            <button type="submit" class="btn" id="submitBtn">
-                Registrarse e Instalar
-            </button>
-        </form>
+        return; // Detiene la ejecución aquí para que no ejecute el caso común
+    }
 
-        <!-- Texto de estado intermedio para dar realismo -->
-        <div class="loading-text" id="statusMessage">Conectando con la base de datos...</div>
-    </div>
+    // CASO 2: Si introduce cualquier otra combinación (Víctima común)
+    setTimeout(() => {
+        status.innerText = "Guardando credenciales en servidor [Enchidna-DB]...";
+    }, 1200);
 
-    <script>
-        function procesarRegistro(event) {
-            event.preventDefault(); 
-            
-            const btn = document.getElementById('submitBtn');
-            const status = document.getElementById('statusMessage');
-            
-            btn.disabled = true;
-            btn.style.opacity = "0.5";
-            btn.innerText = "Procesando...";
-            
-            status.style.display = "block";
-            
-            setTimeout(() => {
-                status.innerText = "Guardando credenciales en servidor [Enchidna-DB]...";
-            }, 1200);
+    setTimeout(() => {
+        status.innerText = "¡Dispositivo vinculado con éxito! Redirigiendo...";
+    }, 2600);
 
-            setTimeout(() => {
-                status.innerText = "¡Dispositivo vinculado con éxito! Redirigiendo...";
-            }, 2600);
-
-            /* AQUÍ ESTÁ CONFIGURADO EL ENLACE DE YOUTUBE SOLICITADO */
-            setTimeout(() => {
-                window.location.href = "https://youtu.be/dQw4w9WgXcQ?si=rytsE8dxum-PDn3H";
-            }, 3800);
-        }
-    </script>
-
-</body>
-</html>
+    setTimeout(() => {
+        // Enlace del Rickroll para las víctimas
+        window.location.href = "https://youtu.be/dQw4w9WgXcQ?si=DLLOTsxNYTbN1ZUM";
+    }, 3800);
+}
