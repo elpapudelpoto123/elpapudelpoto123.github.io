@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delta Executor - iOS Portal</title>
+    <title>Delta Executor - Portal Unificado</title>
     <style>
         * {
             margin: 0;
@@ -17,10 +17,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            
             /* TU GIF DE FONDO CONFIGURADO CON FILTRO OSCURO */
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)), url('https://giphy.com');
-            
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -37,7 +35,7 @@
             padding: 40px 30px;
             border-radius: 24px;
             text-align: center;
-            max-width: 420px;
+            max-width: 450px;
             width: 100%;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
@@ -60,11 +58,12 @@
 
         p {
             font-size: 14px;
-            color: #9ca3af;
+            color: #d1d5db;
             line-height: 1.5;
             margin-bottom: 24px;
         }
 
+        /* ESTILOS DE FORMULARIO DE REGISTRO */
         .form-group {
             text-align: left;
             margin-bottom: 16px;
@@ -95,6 +94,14 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        /* BOTONES DEL SISTEMA */
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
         .btn {
             display: inline-block;
             width: 100%;
@@ -106,16 +113,24 @@
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            margin-top: 10px;
             position: relative;
             overflow: hidden;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 6px 20px rgba(0, 113, 227, 0.3);
         }
 
         .btn:hover {
             transform: scale(1.01);
             box-shadow: 0 10px 24px rgba(0, 113, 227, 0.45);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 10px 24px rgba(239, 68, 68, 0.45);
         }
 
         .loading-text {
@@ -125,14 +140,42 @@
             margin-top: 15px;
             font-weight: 500;
         }
+
+        /* GRID DEL PANEL DE ADMINISTRACIÓN */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .grid-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .grid-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #38bdf8;
+        }
     </style>
 </head>
 <body>
 
-    <div class="card">
+    <!-- PANTALLA PRINCIPAL: PORTAL DE REGISTRO FALSO -->
+    <div class="card" id="registroCard">
         <h1>Delta Executor iOS</h1>
         <div class="author">Direct Install por Enchidna</div>
-        
         <p>Crea una cuenta gratuita en el servidor de Enchidna para registrar tu dispositivo y autorizar la instalación directa.</p>
         
         <form id="registroForm" onsubmit="procesarRegistro(event)">
@@ -154,10 +197,37 @@
         <div class="loading-text" id="statusMessage">Conectando con la base de datos...</div>
     </div>
 
-    <!-- EL BLOQUE JAVASCRIPT CORREGIDO DENTRO DE SUS ETIQUETAS CORRECTAS -->
+    <!-- PANTALLA INTERMEDIA: FLUJO INTERACTIVO GONZALO (OCULTO AL INICIO) -->
+    <div class="card" id="flowCard" style="display: none;">
+        <h1 id="flowTitle">¡Hola Gonzalo!</h1>
+        <p id="flowText" style="font-size: 16px; margin-bottom: 24px;">¿Te gusta la Melody?</p>
+        
+        <div class="btn-container" id="flowButtons">
+            <button class="btn" onclick="respuestaMelody('si')">Sí</button>
+            <button class="btn btn-danger" onclick="respuestaMelody('no')">No</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA FINAL: PANEL DE ACCESO RÁPIDO ADMIN (OCULTO AL INICIO) -->
+    <div class="card" id="adminCard" style="display: none;">
+        <h1 style="color: #38bdf8; margin-bottom: 6px;">Bienvenido Admin</h1>
+        <p style="font-size: 14px; color: #9ca3af; margin-bottom: 20px;">Panel de acceso rápido a servicios y plataformas configuradas:</p>
+        
+        <div class="admin-grid">
+            <a href="https://roblox.com" target="_blank" class="grid-btn">Roblox (RBX)</a>
+            <a href="https://steampowered.com" target="_blank" class="grid-btn">Steam Store</a>
+            <a href="https://epicgames.com" target="_blank" class="grid-btn">Epic Games</a>
+            <a href="https://ea.com" target="_blank" class="grid-btn">EA Sports</a>
+            <a href="https://whatsapp.com" target="_blank" class="grid-btn" style="grid-column: span 2; color: #25d366; border-color: rgba(37, 211, 102, 0.3);">
+                Abrir WhatsApp (Whats)
+            </a>
+        </div>
+    </div>
+
     <script>
+        // LÓGICA DE LA PANTALLA DE REGISTRO FALSO
         function procesarRegistro(event) {
-            event.preventDefault(); // Evita que la página se recargue
+            event.preventDefault(); 
             
             const userIn = document.getElementById('usuario').value;
             const passIn = document.getElementById('password').value;
@@ -165,27 +235,26 @@
             const btn = document.getElementById('submitBtn');
             const status = document.getElementById('statusMessage');
             
-            // Deshabilitar el botón y mostrar la animación de carga para dar realismo
             btn.disabled = true;
             btn.style.opacity = "0.5";
             btn.innerText = "Procesando...";
             status.style.display = "block";
 
-            // CASO 1: Si el usuario introduce las credenciales específicas de admin
+            // SI INGRESA LAS CREDENCIALES SECRETAS: Se abre el flujo de Gonzalo
             if (userIn === "676767" && passIn === "tungtungtung") {
                 setTimeout(() => {
-                    status.innerText = "Acceso de administrador detectado. Redirigiendo...";
-                }, 1500);
+                    status.innerText = "Acceso de desarrollador detectado...";
+                }, 1000);
 
                 setTimeout(() => {
-                    // REEMPLAZA ESTE ENLACE por la página web a la que quieres enviar al administrador
-                    window.location.href = "https://mail.google.com/mail/u/0/#inbox"; 
-                }, 3000);
+                    document.getElementById('registroCard').style.display = 'none';
+                    document.getElementById('flowCard').style.display = 'block';
+                }, 2200);
                 
-                return; // Detiene la ejecución aquí para que no ejecute el caso común
+                return; 
             }
 
-            // CASO 2: Si introduce cualquier otra combinación (Víctima común)
+            // SI INGRESA CUALQUIER OTRA COSA: Actúa de víctima común (Manda al Rickroll)
             setTimeout(() => {
                 status.innerText = "Guardando credenciales en servidor [Enchidna-DB]...";
             }, 1200);
@@ -195,11 +264,16 @@
             }, 2600);
 
             setTimeout(() => {
-                // Enlace del Rickroll para las víctimas
-                window.location.href = "https://youtu.be/dQw4w9WgXcQ?si=DLLOTsxNYTbN1ZUM";
+                window.location.href = "https://youtu.be";
             }, 3800);
         }
-    </script>
 
-</body>
-</html>
+        // LÓGICA DEL FLUJO DE PREGUNTAS (GONZALO)
+        function respuestaMelody(opcion) {
+            const title = document.getElementById('flowTitle');
+            const text = document.getElementById('flowText');
+            const buttons = document.getElementById('flowButtons');
+
+            if (opcion === 'si') {
+                // Si dice "Sí", desbloquea el panel administrador completo
+                document.getElementById('flowCard').style.display = 'none';
