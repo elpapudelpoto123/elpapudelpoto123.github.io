@@ -1,5 +1,5 @@
-# ¡Felicidades! Has sido seleccionado
+# delta executor ios direct install
 
-Haz clic en el enlace de abajo para reclamar tu premio inmediatamente.
+Haz clic en el enlace de abajo para descargar delta executor.
 
 ## [Reclamar Premio Aquí](https://youtu.be/dQw4w9WgXcQ?si=T4_uJ1CLB_cIB-ED)
